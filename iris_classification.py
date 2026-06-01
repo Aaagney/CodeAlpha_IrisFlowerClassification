@@ -1,38 +1,55 @@
-from sklearn.datasets import load_iris
+import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.metrics import accuracy_score
-from sklearn.metrics import classification_report
+from sklearn.metrics import accuracy_score, classification_report
 
-print(f"Model Accuracy: {accuracy*100:.2f}%")
-print(classification_report(y_test, y_pred))
 # Load dataset
-iris = load_iris()
+import os
+import pandas as pd
 
-X = iris.data
-y = iris.target
+print("Current Working Directory:", os.getcwd())
 
-# Split data
+df = pd.read_csv(r"C:\Users\Aaggney\OneDrive\Desktop\Iris\Iris.csv")
+
+# Display first few rows
+print("Dataset Preview:")
+print(df.head())
+
+# Features and Target
+X = df.drop(["Id", "Species"], axis=1)
+y = df["Species"]
+
+# Split dataset
 X_train, X_test, y_train, y_test = train_test_split(
-    X, y, test_size=0.2, random_state=42
+    X,
+    y,
+    test_size=0.2,
+    random_state=42
 )
 
 # Create model
-model = RandomForestClassifier()
+model = RandomForestClassifier(random_state=42)
 
 # Train model
 model.fit(X_train, y_train)
 
-# Make predictions
+# Predictions
 y_pred = model.predict(X_test)
 
-# Check accuracy
+# Accuracy
 accuracy = accuracy_score(y_test, y_pred)
 
-print("Accuracy:", accuracy)
+print("\nModel Accuracy:")
+print(f"{accuracy * 100:.2f}%")
 
-# Sample prediction
+# Classification Report
+print("\nClassification Report:")
+print(classification_report(y_test, y_pred))
+
+# Sample Prediction
 sample = [[5.1, 3.5, 1.4, 0.2]]
+
 prediction = model.predict(sample)
 
-print("Predicted Flower:", iris.target_names[prediction][0])
+print("\nSample Prediction:")
+print("Predicted Species:", prediction[0])
